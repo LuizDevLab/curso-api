@@ -4,6 +4,51 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
+model Aluno {
+  id Int @id @default(autoincrement())
+  nome String
+  matricula String @unique
+  email String @unique
+  curso_id Int
+  curso Curso @relation(fields: [curso_id], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Professor {
+  id Int @unique @default(autoincrement())
+  nome String
+  matricula String @unique
+  email String @unique
+  departamento String
+  disciplinas Disciplina[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Curso {
+  id Int @id @default(autoincrement())
+  nome String
+  codigo String @unique
+  duracao Int
+  alunos Aluno[]
+  disciplinas Disciplina[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Disciplina {
+  id Int @unique @default(autoincrement())
+  nome String
+  codigo String @unique
+  carga_horaria Int
+  curso_id Int
+  professor_id Int
+  curso Curso @relation(fields: [curso_id], references: [id])
+  professor Professor @relation(fields: [professor_id], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
