@@ -1,63 +1,26 @@
-import { Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
-export const listarAlunos = async () => {
-  return Prisma.aluno.findMany({
-    include: { curso: true },
-  });
-};
+const prisma = new PrismaClient()
 
-export const buscarAlunoPorId = async (id: number) => {
-  return Prisma.aluno.findUnique({
-    where: { id },
-    include: { curso: true },
-  });
-};
+export async function getAllAlunos() {
+  return await prisma.aluno.findMany({ include: { curso: true } })
+}
 
-export const criarAluno = async (data: {
-  nome: string;
-  matricula: string;
-  email: string;
-  curso_id: number;
-}) => {
-  
-  const curso = await Prisma.curso.findUnique({ // Verifica se o curso existe
-    where: { id: data.curso_id },
-  });
-  if (!curso) {
-    throw new Error("Curso não encontrado.");
-  }
+export async function getAlunoById(id: number) {
+  return await prisma.aluno.findUnique({
+    where: {id},
+    include: { curso: true }
+  })
+}
 
-  return Prisma.aluno.create({
-    data,
-  });
-};
+export async function createAluno(data: any) {
+  return await prisma.aluno.create({ data })
+}
 
-export const atualizarAluno = async (
-  id: number,
-  data: {
-    nome?: string;
-    matricula?: string;
-    email?: string;
-    curso_id?: number;
-  }
-) => {
-  const aluno = await Prisma.aluno.findUnique({ where: { id } });
-  if (!aluno) {
-    throw new Error("Aluno não encontrado.");
-  }
+export async function updateAluno(id: number, data: any) {
+  return await prisma.aluno.update({where: {id}, data})
+}
 
-  return Prisma.aluno.update({
-    where: { id },
-    data,
-  });
-};
-
-export const deletarAluno = async (id: number) => {
-  const aluno = await Prisma.aluno.findUnique({ where: { id } });
-  if (!aluno) {
-    throw new Error("Aluno não encontrado.");
-  }
-
-  await Prisma.aluno.delete({ where: { id } });
-  return { message: "Aluno removido com sucesso." };
-};
+export async function deleteAluno(id: number) {
+  return await prisma.aluno.delete({ where: { id } })
+}

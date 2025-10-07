@@ -1,11 +1,5 @@
 import { Router } from "express";
-import {
-  getAll,
-  getById,
-  create,
-  update,
-  remove,
-} from "../controller/alunoController";
+import { getAll, getById, create, update, remove } from "../controller/professorController";
 
 const router = Router();
 
