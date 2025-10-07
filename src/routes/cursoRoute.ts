@@ -4,8 +4,8 @@ import {
   getById,
   create,
   update,
-  remove,
-} from "../controller/alunoController";
+  remove
+} from "../controller/cursoController";
 
 const router = Router();
 
